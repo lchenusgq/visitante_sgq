@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro de Visitante</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'estilos.css' %}">
+    <script>
+        async function buscarCedula() {
+            const cedula = document.getElementById('cedula').value;
+            if (!cedula) return;
+
+            const response = await fetch('/api/verificar_cedula/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ cedula })
+            });
+
+            const data = await response.json();
+            const nombreField = document.getElementById('nombre');
+            const apellidoField = document.getElementById('apellido');
+            const btnRegistrar = document.getElementById('btnRegistrar');
+
+            if (data.exists) {
+                nombreField.value = data.nombres;
+                apellidoField.value = data.apellidos;
+                nombreField.readOnly = true;
+                apellidoField.readOnly = true;
+                btnRegistrar.disabled = false;
+            } else {
+                nombreField.value = '';
+                apellidoField.value = '';
+                nombreField.readOnly = false;
+                apellidoField.readOnly = false;
+                btnRegistrar.disabled = false;
+                alert('La cédula no está registrada. Complete los datos manualmente.');
+            }
+            console.log('Nombre:', nombreField.value);
+            console.log('Apellido:', apellidoField.value);
+        }
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Formulario de Registro de Visitante</h1>
+        <p>Bienvenido, {{ user.username }}!</p>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Formulario de Registro de Visitante -->
+        <h2>Registrar Visita</h2>
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="cedula">Número de Cédula:</label>
+                <input type="text" id="cedula" name="cedula" onblur="buscarCedula()" required>
+            </div>
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombres" readonly>
+            </div>
+            <div class="form-group">
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellidos" readonly>
+            </div>
+            <div class="form-group">
+                <label for="oficina">Oficina:</label>
+                <select id="oficina" name="oficina" required>
+                    <option value="">Seleccione una oficina</option>
+                    {% for oficina in oficinas %}
+                        <option value="{{ oficina.id }}">{{ oficina.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- Agregar el campo para el motivo de la visita -->
+            <div class="form-group">
+                <label for="motivo_visita">Motivo de la Visita:</label>
+                <input type="text" id="motivo_visita" name="motivo_visita" required>
+            </div>
+            <div class="form-group">
+                <label for="fecha_hora">Fecha y Hora de la Visita:</label>
+                <input type="text" id="fecha_hora" name="fecha_hora" value="{{ fecha_hora }}" readonly>
+            </div>
+            <div class="botones">
+                <button type="submit" id="btnRegistrar" disabled>Registrar Visita</button>
+                <a href="{% url 'formulario_reporte' %}" class="btn btn-secondary">Ir a Reportes</a>
+                <a href="{% url 'login' %}" class="btn btn-secondary">Salir</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+<script>
+    function getCSRFToken() {
+        let cookieValue = null;
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith('csrftoken=')) {
+                cookieValue = decodeURIComponent(cookie.substring('csrftoken='.length));
+                break;
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+
+
+<script>
+    document.getElementById("cedula").addEventListener("input", function(e) {
+        let valor = e.target.value;
+    
+        // Eliminar todo lo que no sea número
+        valor = valor.replace(/\D/g, "");
+    
+        // Limitar a 10 caracteres
+        if (valor.length > 10) {
+            valor = valor.slice(0, 10);
+        }
+    
+        // Asignar el valor limpio al input
+        e.target.value = valor;
+    });
+</script>
+
+
+</html>

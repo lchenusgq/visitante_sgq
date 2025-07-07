@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Reporte de Visitas</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'estilos.css' %}">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        iframe {
+            flex-grow: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .botones {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 5px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; padding: 10px;">Reporte de Visitas</h1>
+
+        <!--<iframe src="http://192.168.60.6/ver_pdf/" width="100%" height="100%"></iframe>-->
+
+        
+        <iframe src="{% static 'pdfjs/web/viewer.html' %}?file={% static 'pdfs/visitas.pdf' %}" width="100%" height="100%"></iframe>
+
+
+	    <!--<iframe src="{% static 'pdfjs/web/viewer.html' %}?file=http://192.168.60.6/ver_pdf/"--> <!--## Configuracion para linux ##-->  
+        <!--	width="100%" height="100%"></iframe>-->
+
+
+        <div class="botones">
+            <!--<a href="{% url 'descargar_pdf' %}" class="btn btn-primary" download>Descargar PDF</a>-->
+            <a href="{% url 'registro_visitante' %}" class="btn btn-secondary">Volver al Registro</a>
+        </div>
+    </div>
+</body>
+</html>

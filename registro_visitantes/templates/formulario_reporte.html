@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulario de reporte</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'estilos.css' %}">
+</head>
+<body>
+    <div class="login-container"> 
+        <h1>Ingresar rango de Fechas para Generar Reportes</h1> 
+        {% if messages %} 
+            <ul class="messages"> 
+                {% for message in messages %} 
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> 
+                {% endfor %} 
+            </ul> 
+        {% endif %} 
+        <form method="post" action="{% url 'reporte_visitas_pdf' %}" class="login-form"> 
+            {% csrf_token %} 
+            <label>Fecha inicio:</label> 
+            <input type="date" name="fecha_inicio"> 
+            <label>Fecha fin:</label> 
+            <input type="date" name="fecha_fin"> 
+            <div class="botones"> 
+                <button type="submit">Generar Reporte</button> 
+                <a href="{% url 'registro_visitante' %}" class="btn btn-secondary">Ir a Registrar Visitante</a> 
+            </div> 
+        </form> 
+    </div>
+</body>
+</html>

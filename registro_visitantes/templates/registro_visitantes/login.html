@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'estilos.css' %}">
+</head>
+<body>
+    <div class="login-container login-small">
+        <h1>Registro de Visitantes</h1>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            <label>Usuario:</label>
+            <input type="text" name="username">
+            <label>Contraseña:</label>
+            <input type="password" name="password">
+            <button type="submit" class="btn-ingresar">Ingresar</button>
+            <!-- <button type="submit">Ingresar</button> -->
+        </form>
+    </div>
+</body>
+</html>

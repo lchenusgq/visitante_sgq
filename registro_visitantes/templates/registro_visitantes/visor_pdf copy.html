@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Reporte de Visitas</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'estilos.css' %}">
+    
+    <style>
+        /* Asegura que html y body ocupen todo el tamaño de la ventana */
+        html, body {
+            height: 100%;  /* Hacer que ocupe el 100% de la ventana */
+            margin: 0;     /* Eliminar márgenes */
+            padding: 0;    /* Eliminar relleno */
+        }
+
+        /* Asegura que el contenedor principal ocupe todo el espacio disponible */
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;  /* Esto hace que el contenedor ocupe toda la altura de la ventana */
+        }
+
+        /* Asegura que el iframe ocupe todo el espacio disponible */
+        iframe {
+            flex-grow: 1;  /* El iframe tomará todo el espacio restante */
+            width: 100%;   /* Ocupa todo el ancho disponible */
+            height: 100%;  /* Ocupa toda la altura disponible */
+            border: none;  /* Elimina el borde del iframe */
+        }
+
+        /* Estilo para los botones de abajo */
+        .botones {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin: 5px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; padding: 10px;">Reporte de Visitas</h1>
+
+        <!-- Aquí visualizas el PDF -->
+        <!--<iframe src="data:application/pdf;base64,{{ pdf_base64 }}" frameborder="0"></iframe>-->
+
+
+        <!--<iframe src="{% static 'pdfs/reporte.pdf' %}" frameborder="0"></iframe>-->
+
+        <!--<iframe src="{% url 'ver_pdf' %}" frameborder="0"></iframe>-->
+
+        <iframe src="http://127.0.0.1:8000/ver_pdf/" frameborder="0"></iframe>
+
+        <!--<iframe src="http://192.168.60.6:80/ver_pdf/" frameborder="0"></iframe>-->
+
+        <!--<a href="{% url 'ver_pdf' %}" target="_blank">Abrir PDF en nueva pestaña</a>-->
+
+                
+        <div class="botones">
+            <a href="{% url 'descargar_pdf' %}" class="btn btn-primary" download>Descargar PDF</a>
+            <a href="{% url 'registro_visitante' %}" class="btn btn-secondary">Volver al Registro</a>
+        </div>
+    </div>
+</body>
+</html>
