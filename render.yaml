@@ -1,0 +1,25 @@
+databases:
+  - name: visitante_sgq
+    databaseName: visitante_sgq
+    user: "postgres"
+
+services:
+  - type: web
+    name: visitante-sgq
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn visitante_sgq.wsgi"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: visitante_sgq
+          property: connectionString
+      - key: DJANGO_SETTINGS_MODULE
+        value: visitante_sgq.settings
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+
