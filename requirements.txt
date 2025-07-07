@@ -1,6 +1,9 @@
 asgiref==3.8.1
 chardet==5.2.0
 Django==5.2
+django-cors-headers==4.7.0
+gunicorn==23.0.0
+packaging==25.0
 pillow==11.2.1
 psycopg2-binary==2.9.10
 pytz==2025.2
