@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import dj_database_url
+
 from pathlib import Path
 import os
 
@@ -91,28 +93,79 @@ WSGI_APPLICATION = 'visitante_sgq.wsgi.application'
 #    }
 #}
 
-DATABASES = {
-    'default': {    
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'visitante_sgq',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5433',
-        #'PORT': '5434',     ## configuracion para el servidor ##
-    },
-    'personasDB': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'personasDB',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': '192.168.60.11',
-        'PORT': '5434',
-        'OPTIONS': {
-            'client_encoding': 'UTF8',  # o prueba 'ISO8859-1' si no funciona  LATIN1
+
+if os.getenv('RENDER', '') == 'true':
+    # Configuración para Render (producción)
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.getenv('DATABASE_URL'),
+            conn_max_age=600,
+            ssl_require=True
+        ),
+        'personasDB': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'personasDB',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '192.168.60.11',
+            'PORT': '5434',
+            'OPTIONS': {
+                'client_encoding': 'UTF8',
+            }
         }
     }
-}
+else:
+    # Configuración local (desarrollo)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'visitante_sgq',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': 'localhost',
+            'PORT': '5433',
+        },
+        'personasDB': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'personasDB',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '192.168.60.11',
+            'PORT': '5434',
+            'OPTIONS': {
+                'client_encoding': 'UTF8',
+            }
+        }
+    }
+
+
+
+#DATABASES = {
+#    'default': {    
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'visitante_sgq',
+#        'USER': 'postgres',
+#        'PASSWORD': 'postgres',
+#        'HOST': 'localhost',
+#        'PORT': '5433',
+#        #'PORT': '5434',     ## configuracion para el servidor ##
+#    },
+#    'personasDB': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'personasDB',
+#        'USER': 'postgres',
+#        'PASSWORD': 'postgres',
+#        'HOST': '192.168.60.11',
+#        'PORT': '5434',
+#        'OPTIONS': {
+#            'client_encoding': 'UTF8',  # o prueba 'ISO8859-1' si no funciona  LATIN1
+#        }
+#    }
+#}
+
+
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
